@@ -1,9 +1,10 @@
 <?php
 
-// Use in the “Post-Receive URLs” section of your GitHub repo.
-
-if ( $_POST['payload'] ) {
-shell_exec( ‘cd /home/broz3r/cv-template/ && git reset –hard HEAD && git pull’ );
+if ($_POST && $_POST['payload']){
+    $payload = json_decode($_POST['payload'], true);
+    if (isset($payload['ref']) && $payload['ref'] == 'refs/heads/master'){
+        exec("/usr/bin/git pull origin master >> ./webhook.log 2>&1 && echo $(date) >> ./webhook.log");
+    }
 }
 
-?>hi
+?>
